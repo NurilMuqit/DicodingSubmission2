@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">DicodingSubmission2</string>
+    <string name="nama_user">Nuril Muqit</string>
+    <string name="searchbar_hint">Cari User</string>
+    <string name="follower">%1$d Followers</string>
+    <string name="following">%1$d Following</string>
+</resources>
