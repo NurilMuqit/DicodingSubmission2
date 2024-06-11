@@ -4,4 +4,8 @@
     <string name="searchbar_hint">Cari User</string>
     <string name="follower">%1$d Followers</string>
     <string name="following">%1$d Following</string>
+    <string name="fragment_1">%1$s followers</string>
+    <string name="fragment_2">%1$s following</string>
+    <string name="tab_text_1">Followers</string>
+    <string name="tab_text_2">Following</string>
 </resources>

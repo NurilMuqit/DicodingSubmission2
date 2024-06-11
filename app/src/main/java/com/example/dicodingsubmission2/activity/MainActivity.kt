@@ -29,6 +29,14 @@ class MainActivity : AppCompatActivity() {
 
         with(binding){
             searchView.setupWithSearchBar(searchBar)
+            searchView.editText.setOnEditorActionListener{
+                    _, _, _ ->
+                val query = searchView.text.toString()
+                searchBar.setText(query)
+                searchView.hide()
+                setUserView(query)
+                false
+            }
         }
 
         supportActionBar?.hide()
@@ -36,12 +44,12 @@ class MainActivity : AppCompatActivity() {
         val layoutManager= LinearLayoutManager(this)
         binding.rvUser.layoutManager = layoutManager
 
-        setUserView()
+        setUserView("a")
     }
 
-    private fun setUserView() {
+    private fun setUserView(query:String) {
         showLoading(true)
-        ApiConfig.getApiService().getSearchUsers("1").enqueue(object: Callback<UserResponse> {
+        ApiConfig.getApiService().getSearchUsers(query).enqueue(object: Callback<UserResponse> {
             override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
                 if (response.isSuccessful) {
                     val listUser = response.body()?.items
@@ -62,8 +70,10 @@ class MainActivity : AppCompatActivity() {
     private fun showLoading(isLoading: Boolean) {
         if (isLoading){
             binding.progressBar.visibility = View.VISIBLE
+            binding.rvUser.visibility = View.GONE
         }else{
             binding.progressBar.visibility = View.GONE
+            binding.rvUser.visibility = View.VISIBLE
         }
     }
 

@@ -1,5 +1,6 @@
 package com.example.dicodingsubmission2.api
 
+import com.example.dicodingsubmission2.response.ItemsItem
 import com.example.dicodingsubmission2.response.UserDetailResponse
 import com.example.dicodingsubmission2.response.UserResponse
 import retrofit2.Call
@@ -18,4 +19,13 @@ interface ApiService {
     fun getUserDetail(
         @Path("username") username: String
     ): Call<UserDetailResponse>
+
+    @GET("users/{username}/followers")
+    fun getUserFollowers(
+        @Path("username") username: String
+    ): Call<List<ItemsItem>>
+    @GET("users/{username}/following")
+    fun getUserFollowing(
+        @Path("username") username: String
+    ): Call<List<ItemsItem>>
 }

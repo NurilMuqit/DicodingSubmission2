@@ -7,9 +7,11 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.example.dicodingsubmission2.BuildConfig
 import com.example.dicodingsubmission2.R
+import com.example.dicodingsubmission2.adapter.SectionsPagerAdapter
 import com.example.dicodingsubmission2.api.ApiConfig
 import com.example.dicodingsubmission2.databinding.ActivityUserBinding
 import com.example.dicodingsubmission2.response.UserDetailResponse
+import com.google.android.material.tabs.TabLayoutMediator
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -19,7 +21,8 @@ class UserActivity : AppCompatActivity() {
     private lateinit var binding: ActivityUserBinding
 
     companion object {
-        private const val TAG = "UserActivity"
+        const val TAG = "UserActivity"
+        private val TAB = intArrayOf(R.string.tab_text_1, R.string.tab_text_2)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,11 +32,23 @@ class UserActivity : AppCompatActivity() {
 
         val login = intent.getStringExtra("login")
 
+        val sectionsPagerAdapter = SectionsPagerAdapter(this)
+        sectionsPagerAdapter.username = login.toString()
+
+        val viewPager = binding.viewPager
+        viewPager.adapter = sectionsPagerAdapter
+
+        val tabs = binding.tabLayout
+        TabLayoutMediator(tabs, viewPager) { tab, position ->
+            tab.text = resources.getString(TAB[position])
+        }.attach()
+
         if (login != null) {
             setUserDetail(login)
         }else {
             Log.e(TAG, "onCreate: login is null")
         }
+
     }
 
     private fun setUserDetail(login: String) {
@@ -62,12 +77,11 @@ class UserActivity : AppCompatActivity() {
 
     }
     private fun showLoading(isLoading: Boolean) {
-        if (isLoading){
-            binding.progressBar.visibility = View.VISIBLE
-            binding.cardView.visibility = View.GONE
-        }else{
-            binding.progressBar.visibility = View.GONE
-            binding.cardView.visibility = View.VISIBLE
+        binding.apply {
+            progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            cardView.visibility = if (isLoading) View.GONE else View.VISIBLE
+            tabLayout.visibility = if (isLoading) View.GONE else View.VISIBLE
+            viewPager.visibility = if (isLoading) View.GONE else View.VISIBLE
         }
     }
 
