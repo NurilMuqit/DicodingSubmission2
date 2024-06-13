@@ -68,12 +68,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showLoading(isLoading: Boolean) {
-        if (isLoading){
-            binding.progressBar.visibility = View.VISIBLE
-            binding.rvUser.visibility = View.GONE
-        }else{
-            binding.progressBar.visibility = View.GONE
-            binding.rvUser.visibility = View.VISIBLE
+        binding.apply {
+            progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            rvUser.visibility = if (isLoading) View.GONE else View.VISIBLE
         }
     }
 

@@ -3,6 +3,7 @@ package com.example.dicodingsubmission2.activity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.example.dicodingsubmission2.BuildConfig
@@ -29,26 +30,26 @@ class UserActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityUserBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        
         val login = intent.getStringExtra("login")
-
-        val sectionsPagerAdapter = SectionsPagerAdapter(this)
-        sectionsPagerAdapter.username = login.toString()
-
-        val viewPager = binding.viewPager
-        viewPager.adapter = sectionsPagerAdapter
-
-        val tabs = binding.tabLayout
-        TabLayoutMediator(tabs, viewPager) { tab, position ->
-            tab.text = resources.getString(TAB[position])
-        }.attach()
-
         if (login != null) {
-            setUserDetail(login)
-        }else {
-            Log.e(TAG, "onCreate: login is null")
-        }
+            val sectionsPagerAdapter = SectionsPagerAdapter(this)
+            sectionsPagerAdapter.username = login
 
+            val viewPager = binding.viewPager
+            viewPager.adapter = sectionsPagerAdapter
+
+            val tabs = binding.tabLayout
+            TabLayoutMediator(tabs, viewPager) { tab, position ->
+                tab.text = resources.getString(TAB[position])
+            }.attach()
+
+            setUserDetail(login)
+        } else {
+            Log.e(TAG, "onCreate: login is null")
+            Toast.makeText(this, "User login is missing", Toast.LENGTH_SHORT).show()
+            finish()
+        }
     }
 
     private fun setUserDetail(login: String) {

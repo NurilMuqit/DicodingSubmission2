@@ -26,6 +26,7 @@ class FollowFragment : Fragment() {
     }
     private var position: Int = 0
     private var username: String? = null
+    private var users: List<ItemsItem> = listOf()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -37,14 +38,12 @@ class FollowFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        rvFollow()
-
         arguments?.let {
             position = it.getInt(ARG_POSITION)
             username = it.getString(ARG_USERNAME)
         }
+        rvFollow()
         fetchData()
-
     }
 
     private fun rvFollow() {
@@ -55,21 +54,21 @@ class FollowFragment : Fragment() {
     }
 
     private fun fetchData() {
-        showLoading(true)
         username?.let {
             val client = if (position == 1) {
                 ApiConfig.getApiService().getUserFollowers(it)
             } else {
                 ApiConfig.getApiService().getUserFollowing(it)
             }
-
+            showLoading(true)
             client.enqueue(object : Callback<List<ItemsItem>> {
                 override fun onResponse(call: Call<List<ItemsItem>>, response: Response<List<ItemsItem>>) {
                     if (response.isSuccessful) {
                         rvFollow()
-                        response.body()?.let { users ->
-                            adapter.submitList(users)
-                        }
+                        fetchData()
+                        users = response.body()?: listOf()
+                        adapter.submitList(users)
+
                         showLoading(false)
                     }
                 }
